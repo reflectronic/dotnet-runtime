@@ -2091,6 +2091,25 @@ namespace System.Drawing
             CheckErrorStatus(status);
         }
 
+        public void DrawCachedBitmap(CachedBitmap cachedBitmap, int x, int y)
+        {
+            if (cachedBitmap is null)
+                throw new ArgumentNullException(nameof(cachedBitmap));
+
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                // CachedBitmap is not implemented in libgdiplus.
+                throw new PlatformNotSupportedException();
+            }
+
+            int status = Gdip.GdipDrawCachedBitmap(
+                new HandleRef(this, NativeGraphics),
+                new HandleRef(cachedBitmap, cachedBitmap.nativeCachedBitmap),
+                x, y);
+
+            CheckErrorStatus(status);
+        }
+
         /// <summary>
         /// Draws a line connecting the two specified points.
         /// </summary>

@@ -379,6 +379,16 @@ namespace System.Drawing
 
             [DllImport(LibraryName, ExactSpelling = true)]
             internal static extern int GdipCreateBitmapFromStreamICM(Interop.Ole32.IStream stream, out IntPtr bitmap);
+
+            [DllImport(LibraryName, ExactSpelling = true)]
+            internal static extern int GdipCreateCachedBitmap(HandleRef bitmap, HandleRef graphics, out IntPtr cachedBitmap);
+
+            [DllImport(LibraryName, ExactSpelling = true)]
+            internal static extern int GdipDeleteCachedBitmap(HandleRef cachedBitmap);
+
+            [DllImport(LibraryName, ExactSpelling = true)]
+            internal static extern int GdipDrawCachedBitmap(HandleRef graphics, HandleRef cachedBitmap, int x, int y);
+
         }
     }
 }
