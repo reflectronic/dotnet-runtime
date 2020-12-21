@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Diagnostics;
+using System.Runtime.Versioning;
 using System.Text;
 
 namespace System.Runtime.InteropServices
@@ -29,6 +30,24 @@ namespace System.Runtime.InteropServices
         }
 
         private static int GetSystemMaxDBCSCharSize() => 3;
+
+        [SupportedOSPlatform("windows")]
+        public static int QueryInterface(IntPtr pUnk, ref Guid iid, out IntPtr ppv)
+        {
+            throw new PlatformNotSupportedException(SR.PlatformNotSupported_ComInterop);
+        }
+
+        [SupportedOSPlatform("windows")]
+        public static int AddRef(IntPtr pUnk)
+        {
+            throw new PlatformNotSupportedException(SR.PlatformNotSupported_ComInterop);
+        }
+
+        [SupportedOSPlatform("windows")]
+        public static int Release(IntPtr pUnk)
+        {
+            throw new PlatformNotSupportedException(SR.PlatformNotSupported_ComInterop);
+        }
 
         private static bool IsNullOrWin32Atom(IntPtr ptr) => ptr == IntPtr.Zero;
 

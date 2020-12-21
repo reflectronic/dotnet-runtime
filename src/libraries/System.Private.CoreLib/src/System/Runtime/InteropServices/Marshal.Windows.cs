@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Diagnostics;
+using System.Runtime.Versioning;
 
 namespace System.Runtime.InteropServices
 {
@@ -35,6 +36,37 @@ namespace System.Runtime.InteropServices
                 return 2;
 
             return cpInfo.MaxCharSize;
+        }
+
+        [SupportedOSPlatform("windows")]
+        public static unsafe int QueryInterface(IntPtr pUnk, ref Guid iid, out IntPtr ppv)
+        {
+            if (pUnk == IntPtr.Zero)
+                throw new ArgumentNullException(nameof(pUnk));
+
+            fixed (Guid* pIID = &iid)
+            fixed (IntPtr* p = &ppv)
+            {
+                return ((delegate* unmanaged<IntPtr, Guid*, IntPtr*, int>)(*(*(void***)pUnk + 0 /* IUnknown.QueryInterface slot */)))(pUnk, pIID, p);
+            }
+        }
+
+        [SupportedOSPlatform("windows")]
+        public static unsafe int AddRef(IntPtr pUnk)
+        {
+            if (pUnk == IntPtr.Zero)
+                throw new ArgumentNullException(nameof(pUnk));
+
+            return ((delegate* unmanaged<IntPtr, int>)(*(*(void***)pUnk + 1 /* IUnknown.AddRef slot */)))(pUnk);
+        }
+
+        [SupportedOSPlatform("windows")]
+        public static unsafe int Release(IntPtr pUnk)
+        {
+            if (pUnk == IntPtr.Zero)
+                throw new ArgumentNullException(nameof(pUnk));
+
+            return ((delegate* unmanaged<IntPtr, int>)(*(*(void***)pUnk + 2 /* IUnknown.Release slot */)))(pUnk);
         }
 
         // Win32 has the concept of Atoms, where a pointer can either be a pointer
